@@ -1,6 +1,8 @@
 <?php
 include 'inc/headers.inc.php';
 include 'inc/cookie.inc.php';
+define('PATH_LOG', 'path.log');
+include 'inc/log.inc.php';
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ?>
 <!DOCTYPE html>
@@ -58,6 +60,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
             <li><a href='index.php?id=gbook'>Гостевая книга</a>
             </li>
             <li><a href='eshop/catalog.php'>Магазин</a>
+            <li><a href='index.php?id=log'>Журнал посещения</a>
             </li>
         </ul>
         <!-- Навигация -->
