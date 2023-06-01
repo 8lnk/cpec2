@@ -9,5 +9,5 @@ if(is_file('log/'.PATH_LOG)) {
     echo date('d-m-Y H-i-s', $arrLog[0]), ' - ', $arrLog[1], ' -> ', $arrLog[2], '<br>';
     echo "</li>";
   }
-  echo "</ol>
+  echo "</ol>";
 }
