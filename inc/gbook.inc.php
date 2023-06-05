@@ -56,10 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 /* Удаление записи из БД */
 
 if(isset($_GET['del'])) {
-    $del =(int)$_GET['del'];
+    $del =abs((int)$_GET['del']);
+    if ($del). {
     $sql = "DELETE FROM msgs WHERE id = $del";
     $result = mysqli_query($link, $sql);
+    }
     header("Location: " . $_SERVER["REQUEST_URI"]);
+    exit;
 }
 
 /* Удаление записи из БД */
