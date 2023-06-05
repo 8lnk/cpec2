@@ -5,28 +5,35 @@ const DB_HOST = 'localhost';
 const DB_LOGIN = 'root';
 const DB_PASSWORD = 'root';
 const DB_NAME = 'gbook';
-$link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME);
+$link = mysqli_connect(DB_HOST, DB_LOGIN, DB_PASSWORD, DB_NAME) or die(mysqli_connect_error());
 
 /* Основные настройки */
-
+function clearStr($data) {
+    global $link;
+    $data = trim(strip_tags($data));
+    return mysqli_real_escape_string($link, $data);
+}
 /* Сохранение записи в БД */
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if (isset($_POST['name'])) {
-        $name = trim(strip_tags($_POST['name']));
-        $name = mysqli_real_escape_string($link, $name);
+        //$name = trim(strip_tags($_POST['name']));
+        //$name = mysqli_real_escape_string($link, $name);
+        $name = clearStr($_POST['name']);
     } else {
         $name = false;
     }
     if (isset($_POST['email'])) {
-        $email = trim(strip_tags($_POST['email']));
-        $email = mysqli_real_escape_string($link, $email);
+        //$email = trim(strip_tags($_POST['email']));
+        //$email = mysqli_real_escape_string($link, $email);
+        $email = clearStr($_POST['email']);
     } else {
         $email = '';
     }
     if (isset($_POST['msg'])) {
-        $msg = htmlspecialchars($_POST['msg']);
-        $msg = mysqli_real_escape_string($link, $msg);
+        //$msg = htmlspecialchars($_POST['msg']);
+        //$msg = mysqli_real_escape_string($link, $msg);
+        $msg = clearStr($_POST['msg']);
     } else {
         $msg = false;
     }
@@ -40,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
     
     header("Location: " . $_SERVER["REQUEST_URI"]);
+    exit;
 }
 
 
@@ -51,6 +59,7 @@ if(isset($_GET['del'])) {
     $del =(int)$_GET['del'];
     $sql = "DELETE FROM msgs WHERE id = $del";
     $result = mysqli_query($link, $sql);
+    header("Location: " . $_SERVER["REQUEST_URI"]);
 }
 
 /* Удаление записи из БД */
