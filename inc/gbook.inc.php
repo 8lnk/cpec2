@@ -91,14 +91,15 @@ $gbooks = mysqli_fetch_all($result, MYSQLI_ASSOC);
 // }
 /* Вывод записей из БД */
 ?>
- <p>Всего записей в гостевой книге: количество записей</p>
+ <p>Всего записей в гостевой книге: количество записей: <?= mysqli_num_rows($result); ?></p>
 <?php
     foreach ($gbooks as $gbook):
-        $date = date('d-m-Y в H-i-s', $gbook['datetime']);
+        $dt = date('d-m-Y в H-i-s', $gbook['dt']);
+        $msg = nl2br($gbook['msg']);
 ?> 
  <p> 
-  <a href="<?= $gbook['email'] ?>"><?= $gbook['name']; ?></a> <?= $date; ?>  
-   написал<br /><?= $gbook['msg']; ?>
+  <a href="mailto:<?= $gbook['email'] ?>"><?= $gbook['name']; ?></a> <?= $dt; ?>  
+   написал<br /><?= $msg; ?>
 </p> 
 <p align="right">
   <a href="http://mysite.local/index.php?id=gbook&del=<?php echo $gbook['id']; ?>">Удалить</a>
