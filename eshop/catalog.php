@@ -2,6 +2,7 @@
 	// подключение библиотек
 	require "inc/lib.inc.php";
 	require "inc/config.inc.php";
+    $goods = selectAllItems($link);
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,17 @@
 	<th>В корзину</th>
 </tr>
 <?php
-
+    foreach ($goods as $item):
+?>
+<tr>
+    <td><?= $item['title']; ?></td>
+    <td><?= $item['author']; ?></td>
+    <td><?= $item['pubyear']; ?></td>
+    <td><?= $item['price']; ?></td>
+    <td><a href="add2basket.php?id=<?= $item['id']; ?>">В корзину</a></td>
+</tr>
+<?php
+    endforeach;
 ?>
 </table>
 </body>
