@@ -50,6 +50,6 @@ function basketInit ()
 }
 function add2Basket ($id) {
     global $basket;
-    $basket[$id] = 1;
+    $basket[$id] ? ++$basket[$id] : 1;
     saveBasket();
 }
