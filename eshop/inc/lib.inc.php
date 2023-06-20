@@ -82,7 +82,7 @@ function myBasket ($link, $basket) {
     }
     $item = result2Array($result);
     mysqli_free_result($result);
-    return$item;
+    return $item;
 }
 
 function result2Array ($result){
