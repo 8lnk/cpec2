@@ -64,7 +64,7 @@ function getBasketId ($basket) {
     if(isset($goodsId)) {
         return false;
     }
-    foreach ($basket as $item) {
+    foreach ($goodsId as $item) {
         $clearBasket[] = abs((int)$item);
     }
     return $clearBasket;
@@ -80,4 +80,17 @@ function myBasket ($link, $basket) {
     if(!$result = mysqli_query($link, $sql)){
         return false;
     }
+    $item = result2Array($result);
+    mysqli_free_result($result);
+    return$item;
+}
+
+function result2Array ($result){
+    global $basket;
+    $arr = [];
+    while ($row = mysqli_fatch_assoc($result)) {
+        $['quantity'] = $basket[$row['id']];
+        $arr[] = $row;
+    }
+    return $arr;
 }
