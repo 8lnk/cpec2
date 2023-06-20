@@ -94,3 +94,8 @@ function result2Array ($result){
     }
     return $arr;
 }
+function deleteFromBasket($id) {
+    global basket;
+    unset($basket[$id]);
+    seveBasket();
+}
