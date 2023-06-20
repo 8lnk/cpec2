@@ -4,6 +4,5 @@
 	require "inc/config.inc.php";
 
     $id = $_GET['id'] ? clearInt($_GET['id']) : null;
-    $count = 1;
     add2Basket($id);
     header('Location: catalog.php');
