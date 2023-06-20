@@ -18,6 +18,11 @@ function clearStr($str)
     $str = trim(strip_tags($str));
     return $str;
 }
+function clearInt($int)
+{
+    $int = abs((int)$int);
+    return $int;
+}
 
 function selectAllItems($link)
 {
@@ -52,4 +57,27 @@ function add2Basket ($id) {
     global $basket;
     $basket[$id] ? ++$basket[$id] : 1;
     saveBasket();
+}
+function getBasketId ($basket) {
+    $goodsId = array_keys($basket);
+    array_shift($goodsId);
+    if(isset($goodsId)) {
+        return false;
+    }
+    foreach ($basket as $item) {
+        $clearBasket[] = abs((int)$item);
+    }
+    return $clearBasket;
+}
+
+function myBasket ($link, $basket) { 
+    $goodsId = getBasketId($basket);
+    if($goodsId === false) {
+        return false;
+    }
+    $idStr = implode(',', $goodsId);
+    $sql =  "SELECT id, title, author, pubyear, price FROM catalog WHERE id LIKE ($idStr)";
+    if(!$result = mysqli_query($link, $sql)){
+        return false;
+    }
 }
