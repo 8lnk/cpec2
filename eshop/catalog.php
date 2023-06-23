@@ -32,6 +32,7 @@
 </tr>
 <?php
     endforeach;
+    print_r($basket);
 ?>
 </table>
 </body>

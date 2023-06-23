@@ -55,13 +55,14 @@ function basketInit ()
 }
 function add2Basket ($id) {
     global $basket;
-    $basket[$id] ? ++$basket[$id] : 1;
+    $basket[$id] = 1;
+    
     saveBasket();
 }
 function getBasketId ($basket) {
     $goodsId = array_keys($basket);
     array_shift($goodsId);
-    if(!isset($goodsId)) {
+    if(empty($goodsId)) {
         return false;
     }
     foreach ($goodsId as $item) {
@@ -76,7 +77,7 @@ function myBasket ($link, $basket) {
         return false;
     }
     $idStr = implode(',', $goodsId);
-    $sql =  "SELECT id, title, author, pubyear, price FROM catalog WHERE id LIKE ($idStr)";
+    $sql =  "SELECT id, author, title, pubyear, price FROM catalog WHERE id IN ($idStr)";
     if(!$result = mysqli_query($link, $sql)){
         return false;
     }
@@ -99,3 +100,51 @@ function deleteFromBasket($id) {
     unset($basket[$id]);
     saveBasket();
 }
+
+function saveOrders ($datetime) {
+    global $basket, $link;
+    $goods = myBasket($link, $basket);
+    $sql = "INSERT INTO orders ( title, author, pubyear, price, quantity, orderid, datetime) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    if(!$stmt = mysqli_prepare($link, $sql)) {
+        return false;
+    }
+    foreach ($goods as $item) {
+        mysqli_stmt_bind_param($stmt, "ssiiisi", $item['title'], $item['author'], $item['pubyear'], $item['price'], $item['quantity'], $basket['orderid'], $datetime );
+        mysqli_stmt_execute($stmt);
+    }
+    mysqli_stmt_close($stmt);
+    return true;
+}
+
+function getOrders () {
+    global $link;
+    if (!is_file(ORDERS_LOG)){
+        return false;
+    }
+    $orders = file(ORDERS_LOG);
+    $allOrders = [];
+    foreach($orders as $order){
+        list($customerName, $customerEmail, $customerPhone, $customerAddress, $orderId, $orderTime) = explode('|', $order);
+        $orderInfo['name'] = $customerName;
+        $orderInfo['email'] = $customerEmail;
+        $orderInfo['phone'] = $customerPhone;
+        $orderInfo['address'] = $customerAddress;
+        $orderInfo['orderid'] = $orderId;
+        $orderInfo['date'] = $orderTime;
+        $sql = "SELECT title, author, pubyear, price, quantity FROM orders WHERE orderid = '$orderId' AND datetime = $orderTime"; 
+        $result = mysqli_query($link, $sql);
+        if(!$result) {
+            return false;
+        }
+        $items = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        $orderInfo['order'] = $items;
+        $allOrders[] = $orderInfo;
+
+    }
+    return $allOrders;
+}
+
+function removeBasket(){
+    setcookie('basket', '', time()-100);
+}
+    

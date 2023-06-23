@@ -1,6 +1,18 @@
 <?php
 	require "inc/lib.inc.php";
 	require "inc/config.inc.php";
+    if($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $customerName = clearStr($_POST['name']);
+        $customerEmail = clearStr($_POST['email']);
+        $customerPhone = clearStr($_POST['phone']);
+        $customerAddress = clearStr($_POST['address']);
+        $orderId = $basket['orderid'];
+        $orderTime = time();
+        $order = "$customerName|$customerEmail|$customerPhone|$customerAddress|$orderId|$orderTime\n";
+        file_put_contents("admin/" . ORDERS_LOG, $order, FILE_APPEND);
+        saveOrders($orderTime);
+        removeBasket();
+    }
 ?>
 <!DOCTYPE html>
 <html>
